@@ -1,5 +1,10 @@
 var util = require('util');
 var parse = require('./parse');
+var debug = function (msg) {
+    if (true) {
+        console.log(Date.now() + "|CR|" + message);
+    }
+};
 
 var startsWith = function (str, substr) {
     return substr.every(function (c, ix) { return str[ix] === c; });
@@ -38,14 +43,17 @@ moduleExports = function CommandRegistry (name, config) {
 
     function interp (command) {
         command.args = command.args.map(function (arg) {
-            if (typeof arg !== "string") {
-                var subcommand = Object.create(command);
-                subcommand.name = arg.shift();
-                subcommand.args = arg;
-                return interp(subcommand);
-            } else {
+            if (typeof arg === "string") {
                 return arg;
             }
+
+            var subcommand = Object.create(command);
+            subcommand.name = arg.shift();
+            subcommand.args = arg;
+            debug("Interpreting subcommand " + subcommand.name);
+            var ret = interp(subcommand);
+            debug("Subcommand " + subcommand.name + " result: " + ret);
+            return ret;
         });
 
         if (!(command.name in registry) || command.name === "__proto__") {
@@ -57,11 +65,13 @@ moduleExports = function CommandRegistry (name, config) {
     }
 
     return {
-        parseMessage : function parse (msg, recursive) {
+        parseMessage : function parse (msg) {
             var maybeCommandString = toMainCommand(privmsg);
             if (maybeCommandString === null) {
                 return; // Not a command.
             }
+
+            debug("Message received:" + msg);
 
             var args = maybeCommandString.split(' ');
 
@@ -75,9 +85,12 @@ moduleExports = function CommandRegistry (name, config) {
             };
 
             try {
+                debug("Interpreting main command" + command.name);
                 interp(command);
             } catch (err) {
-                if (!(err instanceof CommandDoesNotExist)) {
+                if (err instanceof CommandDoesNotExist) {
+                    debug("Command " + command.name + " does not exist.");
+                } else {
                     throw err;
                 }
             }
@@ -88,6 +101,7 @@ moduleExports = function CommandRegistry (name, config) {
                 throw new Error("Command " + cmd + " already registered.");
             }
 
+            debug("Adding command: " + cmd);
             registry[cmd] = callback;
         },
 
@@ -98,10 +112,13 @@ moduleExports = function CommandRegistry (name, config) {
                 throw new Error("Command " + cmd + " already registered.");
             }
 
+            debug("Adding command (once!): " + cmd);
+
             registry[cmd] = function () { callback(); that.removeCommand(cmd); };
         },
 
         removeCommand : function (cmd) {
+            debug("Removing command: " + cmd);
             delete registry[cmd];
         }
     };

@@ -1,11 +1,29 @@
 {
   "name": "tennu-recursive-command-registry",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Recursive command registry to replace the basic command registry in Tennu.",
   "main": "index.js",
   "scripts": {
     "test": "node test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Havvy/tennu-recursive-command-registry.git"
+  },
+  "maintainers": [
+    {
+      "name": "Ryan Scheel",
+      "email": "ryan.havvy@gmail.com",
+      "web": "http://havvy.net"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Ryan Scheel",
+      "email": "ryan.havvy@gmail.com",
+      "web": "http://havvy.net"
+    }
+  ],
   "keywords": [
     "tennu",
     "command",
