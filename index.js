@@ -54,6 +54,7 @@ module.exports = function CommandRegistry (name, config) {
             var subcommand = Object.create(command);
             subcommand.name = arg.shift();
             subcommand.args = arg;
+            subcommand.isSubcommand = true;
             debug("Interpreting subcommand " + subcommand.name);
             var ret = interp(subcommand);
             debug("Subcommand " + subcommand.name + " result: " + ret);
@@ -94,7 +95,7 @@ module.exports = function CommandRegistry (name, config) {
                 channel: msg.channel,
                 name: args.shift().toLowerCase(),
                 isQuery: msg.isQuery || false,
-                isMain: true
+                isSubcommand: false
             };
 
             try {
