@@ -1,6 +1,6 @@
 {
   "name": "tennu-recursive-command-registry",
-  "version": "0.9.1",
+  "version": "0.9.4",
   "description": "Recursive command registry to replace the basic command registry in Tennu.",
   "main": "index.js",
   "scripts": {

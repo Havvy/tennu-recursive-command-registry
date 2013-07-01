@@ -2,12 +2,16 @@ var util = require('util');
 var parse = require('./parse');
 var debug = function (msg) {
     if (true) {
-        console.log(Date.now() + "|CR|" + message);
+        console.log(Date.now() + "|CR|" + msg);
     }
 };
 
 var startsWith = function (str, substr) {
-    return substr.every(function (c, ix) { return str[ix] === c; });
+    for (var ix = 0; ix < substr.length; ix++) {
+        if (substr[ix] !== str[ix]) return false;
+    }
+
+    return true;
 };
 
 var flatten = function (lists) {
@@ -20,7 +24,7 @@ var CommandDoesNotExist = function (command) {
     return err;
 };
 
-moduleExports = function CommandRegistry (name, config) {
+module.exports = function CommandRegistry (name, config) {
     var trigger = config.trigger || "!";
     var registry = Object.create(null);
 
@@ -61,12 +65,21 @@ moduleExports = function CommandRegistry (name, config) {
         }
 
         var ret = registry[command.name](command);
-        return util.isArray(ret) ? ret : ret.toString().split(" ");
+
+        if (ret === null) {
+            return "null";
+        } else if (ret === undefined) {
+            return "undefined";
+        } else if (util.isArray(ret)) {
+            return ret;
+        } else {
+            return ret.toString().split(" ");
+        }
     }
 
     return {
         parseMessage : function parse (msg) {
-            var maybeCommandString = toMainCommand(privmsg);
+            var maybeCommandString = toMainCommand(msg);
             if (maybeCommandString === null) {
                 return; // Not a command.
             }
