@@ -25,6 +25,7 @@ When all subcommands on a level of a command is
 executed (in this case, only one subcommand), the entire list structure is 
 flattened, and those arguments are passed to `command`.
 
+```
 |---------------------------------------|
 | return value | passed to `command`      |
 |---------------------------------------|
@@ -33,6 +34,7 @@ flattened, and those arguments are passed to `command`.
 | "a b"        | ["arg-1", "a", "b"]    |
 | ["a", "b"]   | ["arg-1", "a", "b"]    |
 |---------------------------------------|
+```
 
 ## Changes in Command Handlers
 
