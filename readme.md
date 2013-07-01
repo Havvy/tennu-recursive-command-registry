@@ -36,6 +36,29 @@ flattened, and those arguments are passed to `command`.
 |---------------------------------------|
 ```
 
+<table>
+    <tr>
+        <th>return value</th>
+        <th>passed `command`</th>
+    </tr>
+    <tr>
+        <td>null</td>
+        <td>["arg-1", "null"]</td>
+    </tr>
+    <tr>
+        <td>undefined</td>
+        <td>["arg-1", "undefined"]</td>
+    </tr>
+    <tr>
+        <td>"a b"</td>
+        <td>["arg-1", "a", "b"]</td>
+    </tr>
+    <tr>
+        <td>["a, b"]</td>
+        <td>["arg-1", "a", "b"]</td>
+    </tr>
+</table>
+
 ## Changes in Command Handlers
 
 The command object has a new property, `isSubcommand` which is false for the
